@@ -2,11 +2,43 @@ import QtQuick
 import QtQuick.Controls 2.0
 import QtQuick.Window
 
-Window {
-    width: 640
-    height: 480
+ApplicationWindow {
+    id: mainWindow
+
+    width: 2000
+    height: 1500
     visible: true
     title: qsTr("Hello World")
+
+    Item {
+        focus: true
+        Keys.onPressed: (event)=> {
+                            if (event.key === Qt.Key_Up) {
+                                event.accepted = true;
+
+                                tankSpeed.value = tankSpeed.value +1
+                            }
+
+                            if (event.key === Qt.Key_Down) {
+                                event.accepted = true;
+
+                                tankSpeed.value = tankSpeed.value -1
+                            }
+
+                            if (event.key === Qt.Key_Right) {
+                                event.accepted = true;
+
+                                turretAngle.value = turretAngle.value +1
+                            }
+
+                            if (event.key === Qt.Key_Left) {
+                                event.accepted = true;
+
+                                turretAngle.value = turretAngle.value -1
+                            }
+        }
+    }
+
 
     Timer {
         id: tankPositionTimer
@@ -29,8 +61,6 @@ Window {
         from: -4
         to: 12
 
-
-
         value: 0
     }
 
@@ -50,24 +80,27 @@ Window {
     Rectangle {
         id: tank
 
+        scale: 1
+
         property real v: tankSpeed.value
         property real angle: 0
 
         rotation: 270
 
-        width: 50
-        height: 80
+        width: 100
+        height: 160
         color: "green"
-        x: 100
-        y: 200
+
+        x: mainWindow.width/2 - width/2
+        y: mainWindow.height/2 - height/2
 
         Rectangle {
             id: engine
 
-            width: 20
-            height: 30
-            x: 10
-            y: 10
+            width: 40
+            height: 60
+            x: 20
+            y: 20
             color: "darkGreen"
         }
 
@@ -76,22 +109,22 @@ Window {
 
             rotation: turretAngle.value
 
-            width: 30
-            height: 30
-            x: 10
-            y: 45
-            radius: 15
+            width: 60
+            height: 60
+            x: 20
+            y: 90
+            radius: 20
             color: "lime"
 
             Rectangle {
                 id: cannon
                 color: "black"
 
-                width: 5
-                height: 35
+                width: 10
+                height: 70
 
-                x: 12.5
-                y: 17.5
+                x: 25
+                y: 35
 
             }
         }
