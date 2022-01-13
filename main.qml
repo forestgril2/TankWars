@@ -13,29 +13,34 @@ ApplicationWindow {
     Item {
         focus: true
         Keys.onPressed: (event)=> {
-                            if (event.key === Qt.Key_Up) {
-                                event.accepted = true;
+            if (event.key === Qt.Key_Up || event.key === Qt.Key_W) {
+                event.accepted = true;
 
-                                tankSpeed.value = tankSpeed.value +1
-                            }
+                tankSpeed.value = tankSpeed.value +1
+            }
 
-                            if (event.key === Qt.Key_Down) {
-                                event.accepted = true;
+            if (event.key === Qt.Key_Down || event.key === Qt.Key_S) {
+                event.accepted = true;
 
-                                tankSpeed.value = tankSpeed.value -1
-                            }
+                tankSpeed.value = tankSpeed.value -1
+            }
 
-                            if (event.key === Qt.Key_Right) {
-                                event.accepted = true;
+            if (event.key === Qt.Key_Right || event.key === Qt.Key_A) {
+                event.accepted = true;
 
-                                turretAngle.value = turretAngle.value +1
-                            }
+                tank.rotation = tank.rotation +1
+            }
 
-                            if (event.key === Qt.Key_Left) {
-                                event.accepted = true;
+            if (event.key === Qt.Key_Left || event.key === Qt.Key_D) {
+                event.accepted = true;
 
-                                turretAngle.value = turretAngle.value -1
-                            }
+                tank.rotation = tank.rotation -1
+            }
+            if  (event.key === Qt.Key_Shift) {
+                event.accepted = true;
+
+                tankSpeed.value = tankSpeed.value = 0
+            }
         }
     }
 
@@ -46,7 +51,8 @@ ApplicationWindow {
         running: true
         repeat: true
         onTriggered: {
-            tank.x = tank.x + tank.v
+            tank.x = tank.x + tank.v.x
+            tank.y = tank.y + tank.v.y
         }
 
     }
@@ -64,28 +70,16 @@ ApplicationWindow {
         value: 0
     }
 
-    Slider {
-        id: turretAngle
-
-        orientation: Qt.Horizontal
-
-        x: 20
-        y: 40
-        from: 0
-        to: 360
-
-        value: 0
-    }
-
     Rectangle {
         id: tank
 
-        scale: 1
+        scale: 0.5
 
-        property real v: tankSpeed.value
+        property real speed: tankSpeed.value
+        property point v: Qt.point(speed*Math.sin(-rotation/180*Math.PI), speed*Math.cos(rotation/180*Math.PI))
         property real angle: 0
 
-        rotation: 270
+        rotation: 0
 
         width: 100
         height: 160
@@ -106,8 +100,6 @@ ApplicationWindow {
 
         Rectangle {
             id: turret
-
-            rotation: turretAngle.value
 
             width: 60
             height: 60
